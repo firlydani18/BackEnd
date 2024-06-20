@@ -1,0 +1,1509 @@
+openapi: '3.0.3'
+info:
+  description: |
+    Ini Adalah Dokumentasi KOSKITA API
+  version: "1.0.0"
+  title: E-commerce App
+  contact:
+    email: l3nteam@gmail.com
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Deploy Server
+    url: 'l3n.my.id'
+  - description: Swagger Server
+    url:  https://virtserver.swaggerhub.com/L3NONEONE_1/KosKita/1.0.0
+  - description: Local Server
+    url: 'http://localhost:8000'
+tags:
+  - name: Auth
+    description: API AUTH
+  - name: Password
+    description: API PASSWORD
+  - name: User
+    description: API USER
+  - name: Kos
+    description: API KOS
+  - name: Rating
+    description: API RATING
+  - name: Image
+    description: API IMAGE
+  - name: Booking
+    description: API BOOKING
+  - name: Chat
+    description: API CHAT
+  - name: Admin
+    description: API ADMIN
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: lendra@gmail.com
+                password:
+                  type: string
+                  example: lendra123
+      responses:
+        '200':
+          description: successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    example: success login
+                  name:
+                    type: string
+                    example: lendra
+                  role:
+                    type: string
+                    example: renter
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpM
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /change-password:
+    put:
+      tags:
+        - Password
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  example: "lendra"
+                new_password:
+                  type: string
+                  example: "lendra123"
+      responses:
+        '200':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+                
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: This can only be done by the logged in user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersSchema'
+        description: Created user object (role otomatis diisi dari backend)
+        required: true
+      responses:
+        '200':
+          description: successful createUser
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Error createUser
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    get:
+      tags:
+        - User
+      summary: Get user profil
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProfil'
+        '400':
+          description: Invalid userid supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    put:
+      tags:
+        - User
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditProfil'
+        description: Updated user object
+        required: true
+      responses:
+        '200':
+          description: succes update user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Invalid userid supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: succes delete user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Invalid userid supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /kos:
+    post:
+      tags:
+        - Kos
+      summary: Create Kos
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKos'
+      responses:
+        '200':
+          description: successful Create Kos
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "Succes Create Kos"
+                  data:
+                    type: object
+                    properties:
+                      kos_id:
+                        type: integer
+                        example: 1
+        '400':
+          description: Error Create Kos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    get:
+      tags:
+        - Kos
+      summary: Get Kos Recomendation
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKosByRating'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Kos not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /kos/{id}:
+    put:
+      tags:
+        - Kos
+      summary: Updated Kos
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKos'
+        description: Updated Update Kos
+        required: true
+      responses:
+        '200':
+          description: succes update kos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    delete:
+      tags:
+        - Kos
+      summary: Delete kos
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      responses:
+        '200':
+          description: succes delete kos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Invalid kos id supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: ko not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    get:
+      tags:
+        - Kos
+      summary: Get Detail Kos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKosDetails'
+        '400':
+          description: Invalid kos id supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: kos not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /kos/search:
+    get:
+      tags:
+        - Kos
+      summary: Search Kos
+      parameters:
+        - name: address
+          in: query
+          description: Query address untuk pencarian alamat
+          required: true
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Query category untuk pencarian menggunakan filter category
+          required: true
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          description: Query minPrice untuk pencarian menggunakan filter minimal harga
+          required: true
+          schema:
+            type: string
+        - name: maxPrice
+          in: query
+          description: Query maxPrice untuk pencarian menggunakan filter maximal harga
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetKosByAlamat'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Kos not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /users/kos:
+    get:
+      tags:
+        - Kos
+      summary: Get My Kos
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMyKos'
+        '400':
+          description: Invalid kos id supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: kos not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /kos/{id}/rating:
+    post:
+      tags:
+        - Rating
+      summary: Rating Score Kos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score:
+                  type: integer
+                  example: 5
+      responses:
+        '200':
+          description: successful Rating Kos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Error Rating Kos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /upload-image/{kosid}:
+    post:
+      tags:
+        - Image
+      summary: Upload Image Kos
+      parameters:
+        - in: path
+          name: kosid
+          schema:
+            type: number
+            example: 1
+          required: true
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateImage'
+      responses:
+        '200':
+          description: successful Upload Image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Error Upload Image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+    put:
+      tags:
+        - Image
+      summary: Edit Image Kos
+      parameters:
+        - in: path
+          name: kosid
+          schema:
+            type: number
+            example: 1
+          required: true
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateImage'
+      responses:
+        '200':
+          description: successful Edit Image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response200'
+        '400':
+          description: Error Upload Image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /booking:
+    post:
+      tags:
+        - Booking
+      summary: Create Booking
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingSchema"
+        description: Created booking
+        required: true
+      responses:
+        "200":
+          description: successful create booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response200"
+        "400":
+          description: Error create booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response500"
+  /booking/{id}:
+    put:
+      tags:
+        - Booking
+      summary: cancel Booking
+      description: This can only be done by the logged in user.
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: cancel
+      responses:
+        "200":
+          description: successful cancel booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response200"
+        "400":
+          description: Error cancel booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response500"
+  /admin:
+    get:
+      tags:
+        - Admin
+      summary: Get Total Data
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllAdmin'
+        '400':
+          description: Invalid kos id supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: kos not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+  /create-room:
+    post:
+      tags:
+        - Chat
+      summary: Create Room
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: successful create room
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /get-room:
+    get:
+      tags:
+        - Chat
+      summary: Get Room
+      responses:
+        '200':
+          description: successful get room
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    room_id:
+                      type: integer
+                example: 
+                  - room_id: 1
+                  - room_id: 2
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /join-room/{roomId}:
+    get:
+      tags:
+        - Chat
+      summary: (websocket) Masuk Room Untuk Mengirim Message
+      parameters:
+        - in: path
+          name: roomId
+          description: Param roomId untuk masuk ke room
+          schema:
+            type: number
+            example: 2
+          required: true
+        - in: query
+          name: userId
+          description: Query userId untuk masuk ke room 
+          schema:
+            type: number
+            example: 1
+          required: true
+      responses:
+        '200':
+          description: successful join room
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    room_id:
+                      type: integer
+                example: 
+                  - room_id: 2
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+  /room/{roomId}:
+    get:
+      tags:
+        - Chat
+      summary: Get Message
+      parameters:
+        - in: path
+          name: roomId
+          description: Param roomId untuk masuk ke room
+          schema:
+            type: number
+            example: 2
+          required: true
+      responses:
+        '200':
+          description: successful join room
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    room_id:
+                      type: integer
+                    sender_id:
+                      type: integer
+                    receiver_id:
+                      type: integer
+                    message:
+                      type: string
+                example: 
+                  - room_id: 2
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response500'
+        '404':
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+
+  
+
+components:
+  schemas:
+    Response200:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+                example: Successful Operation
+            required:
+              - code
+              - message
+    Response400:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: "Bad Request"
+            required:
+              - code
+              - message
+    Response404:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: Not Found
+            required:
+              - code
+              - message
+    Response500:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 500
+              message:
+                type: string
+                example: Internal Server Error
+            required:
+              - code
+              - message
+    Response401:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+            required:
+              - code
+              - message
+    UsersSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        user_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        gender:
+          type: string
+          enum: [male, female]
+        role:
+          type: string
+      example:
+        id: 1
+        name: "lendra syaputra"
+        user_name: "lendra"
+        email: "lendra@gmail.com"
+        password: "lendra123"
+        role: "renter/owner"
+        gender: "putra/putri"
+    GetProfil:
+      properties:
+        message:
+          type: string
+          example: "Succes Read Data"
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            user_name:
+              type: string
+            email:
+              type: string
+            photo_profil:
+              type: string
+              format: uri
+              description: URL of the product photo
+            gender:
+              type: string
+              enum: [male, female]
+          example:
+            name: "lendra syaputra"
+            user_name: "lendra"
+            email: "lendra@gmail.com"
+            photo_profil: 'https://sariroti.com/arjauser.jpg'
+            gender: "putra/putri"
+    EditProfil:
+      type: object
+      properties:
+        name:
+          type: string
+        user_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        photo_profil:
+          type: string
+          format: uri
+          description: URL of the product photo
+        gender:
+          type: string
+          enum: [putra, putri]
+      example:
+        name: "lendra syaputra"
+        user_name: "lendra"
+        email: "lendra@gmail.com"
+        password: "lendra432"
+        photo_profil: https://sariroti.com/arjauser.jpg'
+        gender: "putra/putri"
+    CreateKos:
+      type: object
+      properties:
+        kos_name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [putra, putri, campur]
+        price:
+          type: integer
+        rooms:
+          type: integer
+        address:
+          type: string
+        longitude:
+          type: string
+        latitude:
+          type: string
+        kos_facilities:
+          type: string
+        kos_rules:
+          type: string
+      example:
+        kos_name: "Kos Murah Meriah"
+        description: "kos ini sangat murah bro"
+        category: "putra/putri/campur"
+        price: 1000000
+        rooms: 5
+        address: "jakarta timur laut, arah ke kiri"
+        longitude: "110°22’26.9"
+        latitude: "7°48’10.2"
+        kos_facilities: ["Murah Sih", "Murah Banget"]
+        kos_rules: ["Gaboleh Mabuk", "Sorry Ya Aku Mabuk"]
+    CreateImage:
+      type: object
+      properties:
+        main_kos_photo:
+          type: string
+        front_kos_photo:
+          type: string
+        back_kos_photo:
+          type: string
+        front_room_photo:
+          type: string
+        inside_room_photo:
+          type: string
+      example:
+        main_kos_photo: "https://cloudinary/photoexample.jpg"
+        front_kos_photo: "https://cloudinary/photoexample.jpg"
+        back_kos_photo: "https://cloudinary/photoexample.jpg"
+        front_room_photo: "https://cloudinary/photoexample.jpg"
+        inside_room_photo: "https://cloudinary/photoexample.jpg"    
+    GetKosByAlamat:
+      properties:
+        message:
+          type: string
+          example: "Succes Get Data Kos"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            kos_name:
+              type: string
+            rating:
+              type: integer
+            category:
+              type: string
+              enum: [putra, putri, campur]
+            price:
+              type: integer
+            rooms:
+              type: integer
+            address:
+              type: string
+            kos_facilities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    facilities:
+                      type: string
+            photo_kos:
+              type: array
+              items:
+                type: object
+                properties:
+                  main_kos_photo:
+                    type: string
+      example:
+        kos_name: "Kos Murah Meriah"
+        rating: 4
+        category: "putra/putri/campur"
+        price: 1000000
+        rooms: 5
+        address: "jakarta timur laut, arah ke kiri"
+        kos_facilities: 
+            - id: 1
+              facilities: "Murah Sih"
+            - id: 2
+              facilities: "Murah TV"
+        photo_kos: 
+          main_kos_photo: "https://cloudinary/photoexample.jpg"
+    GetKosByRating:
+      properties:
+        message:
+          type: string
+          example: "Succes Get Data Kos"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            kos_name:
+              type: string
+            rating:
+              type: integer
+            category:
+              type: string
+              enum: [putra, putri, campur]
+            price:
+              type: integer
+            address:
+              type: string
+            kos_facilities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    facilities:
+                      type: string
+            photo_kos:
+              type: array
+              items:
+                type: object
+                properties:
+                  main_kos_photo:
+                    type: string
+      example:
+        kos_name: "Kos Murah Meriah"
+        rating: 4
+        category: "campur"
+        price: 1000000
+        address: "jakarta timur laut, arah ke kiri"
+        kos_facilities: 
+            - id: 1
+              facilities: "Murah Sih"
+            - id: 2
+              facilities: "Murah TV"
+        photo_kos: 
+          main_kos_photo: "https://cloudinary/photoexample.jpg"
+    GetKosDetails:
+      properties:
+        message:
+          type: string
+          example: "Succes Get Data Kos"
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              kos_name:
+                type: string
+              description:
+                type: string
+              rating:
+                type: integer
+              rooms:
+                type: integer
+              category:
+                type: string
+                enum: [putra, putri, campur]
+              price:
+                type: integer
+              address:
+                type: string
+              longitude:
+                type: string
+              latitude:
+                type: string
+              kos_facilities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    facilities:
+                      type: string
+              kos_rules:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    rule:
+                      type: string
+              photo_kos:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    main_kos_photo:
+                      type: string
+                    front_kos_photo:
+                      type: string
+                    back_kos_photo:
+                      type: string
+                    front_room_photo:
+                      type: string
+                    inside_room_photo:
+                      type: string
+              users:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsersSchema'
+      example:
+          id: 1
+          kos_name: "Kos Murahdd Meriah"
+          description: "kos ini sangat murah bro"
+          rating: 4
+          rooms: 5
+          category: "putra/putri/campur"
+          price: 1000000
+          address: "jakarta timur laut, arah ke kiri"
+          longitude: "110°22’26.9"
+          latitude: "7°48’10.2"
+          kos_facilities: 
+            - id: 1
+              facilities: "Murah Sih"
+            - id: 2
+              facilities: "Murah TV"
+          kos_rules: 
+            - id: 1
+              rule: "Gaboleh Mabuk"
+            - id: 2
+              rule: "Gaboleh buk"
+          photo_kos: 
+            main_kos_photo: "https://cloudinary/photoexample.jpg"
+            front_kos_photo: "https://cloudinary/photoexample.jpg"
+            back_kos_photo: "https://cloudinary/photoexample.jpg"
+            front_room_photo: "https://cloudinary/photoexample.jpg"
+            inside_room_photo: "https://cloudinary/photoexample.jpg"
+          users:
+            id: 1
+            name: "lendra"
+            user_name: "lendral3n"
+    GetMyKos:
+      properties:
+        message:
+          type: string
+          example: "Succes Get Data Kos"
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            kos_name:
+              type: string
+            rating:
+              type: integer
+            rooms:
+              type: integer
+            address:
+              type: string
+            kos_facilities:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    facilities:
+                      type: string
+            photo_kos:
+              type: array
+              items:
+                type: object
+                properties:
+                  main_kos_photo:
+                    type: string
+      example:
+          id: 1
+          kos_name: "Kos Murah Meriah"
+          rating: 4
+          address: "jakarta timur laut, arah ke kiri"
+          kos_facilities: 
+            - id: 1
+              facilities: "Murah Sih"
+            - id: 2
+              facilities: "Murah TV"
+          photo_kos: 
+            main_kos_photo: "https://cloudinary/photoexample.jpg"
+    BookingSchema:
+      type: object
+      properties:
+        payment_type:
+          type: string
+          enum: [bank_transfer, e-channel]
+        kos_id:
+          type: integer
+        bank:
+          type: string
+          enum: [bca, bri, bni, mandiri, permata]
+      example:
+        payment_type: "brank_transfer/e-channel"
+        kos_id: 1
+        bank: "bni/bri/bca/mandiri/permata"
+    GetAllAdmin:
+      properties:
+        message:
+          type: string
+          example: "Succes Get All Data"
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              total_user:
+                type: integer
+              total_booking:
+                type: integer
+              total_kos:
+                type: integer
+      example:
+          total_user: 10293029
+          total_booking: 12323
+          total_kos: 9090
+          
+
+
+
+
+
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
