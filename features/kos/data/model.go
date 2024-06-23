@@ -11,10 +11,14 @@ type BoardingHouse struct {
 	gorm.Model
 	Name            string
 	Description     string
-	Category        string 
+	Category        string
 	Price           int
 	Rooms           int
 	Address         string
+	Traveloka       string
+	Agoda           string
+	Hotelcom        string
+	Tiketcom        string
 	Longitude       string
 	Latitude        string
 	PhotoMain       string
@@ -26,7 +30,7 @@ type BoardingHouse struct {
 	User            data.User
 	Ratings         []Rating
 	KosFacilities   []KosFacility `gorm:"foreignKey:BoardingHouseID"`
-	KosRules        []KosRule `gorm:"foreignKey:BoardingHouseID"`
+	KosRules        []KosRule     `gorm:"foreignKey:BoardingHouseID"`
 }
 
 type KosFacility struct {
@@ -50,31 +54,48 @@ type Rating struct {
 	BoardingHouse   BoardingHouse
 }
 
+// type Link struct {
+// 	gorm.Model
+// 	BoardingHouseID uint
+// 	Traveloka       string
+// 	Agoda           string
+// 	Hotelcom        string
+// 	Tiketcom        string
+// }
+
 func CoreToModel(input kos.CoreInput) BoardingHouse {
 	return BoardingHouse{
-		UserID:          input.UserID,
-		Name:            input.Name,
-		Description:     input.Description,
-		Category:        input.Category,
-		Price:           input.Price,
-		Rooms:           input.Rooms,
-		Address:         input.Address,
-		Longitude:       input.Longitude,
-		Latitude:        input.Latitude,
+		UserID:      input.UserID,
+		Name:        input.Name,
+		Description: input.Description,
+		Category:    input.Category,
+		Price:       input.Price,
+		Rooms:       input.Rooms,
+		Address:     input.Address,
+		Longitude:   input.Longitude,
+		Latitude:    input.Latitude,
+		Traveloka:   input.Traveloka,
+		Agoda:       input.Agoda,
+		Hotelcom:    input.Hotelcom,
+		Tiketcom:    input.Tiketcom,
 	}
 }
 
 func CoreToModelPut(input kos.CoreInput) BoardingHouse {
 	return BoardingHouse{
-		UserID:          input.UserID,
-		Name:            input.Name,
-		Description:     input.Description,
-		Category:        input.Category,
-		Price:           input.Price,
-		Rooms:           input.Rooms,
-		Address:         input.Address,
-		Longitude:       input.Longitude,
-		Latitude:        input.Latitude,
+		UserID:      input.UserID,
+		Name:        input.Name,
+		Description: input.Description,
+		Category:    input.Category,
+		Price:       input.Price,
+		Rooms:       input.Rooms,
+		Address:     input.Address,
+		Longitude:   input.Longitude,
+		Latitude:    input.Latitude,
+		Traveloka:   input.Traveloka,
+		Agoda:       input.Agoda,
+		Hotelcom:    input.Hotelcom,
+		Tiketcom:    input.Tiketcom,
 	}
 }
 
@@ -100,7 +121,7 @@ func CoreToModelFacility(facility kos.KosFacilityCore) KosFacility {
 func CoreToModelRule(rule kos.KosRuleCore) KosRule {
 	return KosRule{
 		Model:           gorm.Model{ID: rule.ID},
-		Rule:        rule.Rule,
+		Rule:            rule.Rule,
 		BoardingHouseID: rule.BoardingHouseID,
 	}
 }
@@ -134,6 +155,10 @@ func (bh BoardingHouse) ModelToCoreKos() kos.Core {
 		Latitude:        bh.Latitude,
 		KosFacilities:   kosFacilities,
 		KosRules:        kosRules,
+		Traveloka:       bh.Traveloka,
+		Agoda:           bh.Agoda,
+		Hotelcom:        bh.Hotelcom,
+		Tiketcom:        bh.Tiketcom,
 		PhotoMain:       bh.PhotoMain,
 		PhotoFront:      bh.PhotoFront,
 		PhotoBack:       bh.PhotoBack,
@@ -145,7 +170,6 @@ func (bh BoardingHouse) ModelToCoreKos() kos.Core {
 		User:            bh.User.ModelToCore(),
 	}
 }
-
 
 func CoreToModelRating(input kos.RatingCore) Rating {
 	return Rating{

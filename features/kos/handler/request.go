@@ -16,6 +16,10 @@ type KosRequest struct {
 	Latitude      string   `json:"latitude"`
 	KosFacilities []string `json:"kos_facilities" `
 	KosRules      []string `json:"kos_rules"`
+	Traveloka     string   `json:"traveloka"`
+	Hotelcom      string   `json:"hotelcom"`
+	Agoda         string   `json:"agoda"`
+	Tiketcom      string   `json:"tiketcom"`
 	UserID        uint
 }
 
@@ -27,6 +31,13 @@ type KosFotoRequest struct {
 	PhotoRoomInside *multipart.FileHeader ` form:"inside_room_photo"`
 	UserID          uint
 }
+
+// type LinkRequest struct {
+// 	Traveloka string `json:"traveloka"`
+// 	Hotelcom  string `json:"hotelcom"`
+// 	Agoda     string `json:"agoda"`
+// 	Tiketcom  string `json:"tiketcom"`
+// }
 
 type RatingRequest struct {
 	Score int `json:"score" form:"score"`
@@ -55,6 +66,10 @@ func RequestToCore(input KosRequest, userIdLogin uint) kos.CoreInput {
 		Price:         input.Price,
 		Rooms:         input.Rooms,
 		Address:       input.Address,
+		Traveloka:     input.Traveloka,
+		Agoda:         input.Agoda,
+		Hotelcom:      input.Hotelcom,
+		Tiketcom:      input.Tiketcom,
 		Longitude:     input.Longitude,
 		Latitude:      input.Latitude,
 		KosFacilities: kosFacilities,
@@ -121,6 +136,10 @@ func RequestToCorePut(input KosRequest, userIdLogin uint) kos.CoreInput {
 		Price:         input.Price,
 		Rooms:         input.Rooms,
 		Address:       input.Address,
+		Traveloka:     input.Traveloka,
+		Agoda:         input.Agoda,
+		Hotelcom:      input.Hotelcom,
+		Tiketcom:      input.Tiketcom,
 		Longitude:     input.Longitude,
 		Latitude:      input.Latitude,
 		KosFacilities: kosFacilities,

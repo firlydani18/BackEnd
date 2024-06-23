@@ -9,6 +9,7 @@ type Core struct {
 	Email        string `validate:"required,email"`
 	Password     string `validate:"required"`
 	Gender       string
+	Mobile       string
 	Role         string
 	PhotoProfile string
 	CreatedAt    time.Time
@@ -19,6 +20,7 @@ type CoreUpdate struct {
 	Name         string `validate:"required"`
 	UserName     string `validate:"required"`
 	Email        string `validate:"required,email"`
+	Mobile       string
 	PhotoProfile string
 }
 

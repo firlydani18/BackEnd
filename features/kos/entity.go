@@ -13,6 +13,10 @@ type Core struct {
 	Price           int    `validate:"required"`
 	Rooms           int    `validate:"required"`
 	Address         string `validate:"required"`
+	Traveloka       string
+	Agoda           string
+	Hotelcom        string
+	Tiketcom        string
 	Longitude       string
 	Latitude        string
 	PhotoMain       string
@@ -37,6 +41,10 @@ type CoreInput struct {
 	Price           int    `validate:"required"`
 	Rooms           int    `validate:"required"`
 	Address         string `validate:"required"`
+	Traveloka       string
+	Agoda           string
+	Hotelcom        string
+	Tiketcom        string
 	Longitude       string
 	Latitude        string
 	PhotoMain       string
@@ -86,6 +94,17 @@ type RatingCore struct {
 	UpdatedAt       time.Time
 }
 
+// type LinkCore struct {
+// 	ID              uint
+// 	BoardingHouseID uint
+// 	Traveloka       string
+// 	Agoda           string
+// 	Hotelcom        string
+// 	Tiketcom        string
+// 	CreatedAt       time.Time
+// 	UpdatedAt       time.Time
+// }
+
 type KosDataInterface interface {
 	Insert(userIdLogin int, input CoreInput) (uint, error)
 	Update(userIdLogin int, input CoreInput) error
@@ -97,7 +116,7 @@ type KosDataInterface interface {
 	SelectByUserId(userIdLogin int) ([]Core, error)
 	SearchKos(query, category string, minPrice, maxPrice int) ([]Core, error)
 	InsertImage(userIdLogin, kosId int, input CoreFoto) error
-	GetTotalKos() (int, error) 
+	GetTotalKos() (int, error)
 }
 
 // interface untuk Service Layer

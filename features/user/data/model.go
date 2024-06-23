@@ -14,6 +14,7 @@ type User struct {
 	Email        string `gorm:"unique"`
 	Password     string `gorm:"not null"`
 	Gender       string `gorm:"not null"`
+	Mobile       string `gorm:"not null"`
 	Role         string `gorm:"not null"`
 	PhotoProfile string
 }
@@ -25,6 +26,7 @@ func CoreToModel(input user.Core) User {
 		Email:        input.Email,
 		Password:     input.Password,
 		Gender:       input.Gender,
+		Mobile:       input.Mobile,
 		Role:         input.Role,
 		PhotoProfile: input.PhotoProfile,
 	}
@@ -35,6 +37,7 @@ func CoreToModelUpdate(input user.CoreUpdate) User {
 		Name:         input.Name,
 		UserName:     input.UserName,
 		Email:        input.Email,
+		Mobile:       input.Mobile,
 		PhotoProfile: input.PhotoProfile,
 	}
 }
@@ -47,6 +50,7 @@ func (u User) ModelToCore() user.Core {
 		Email:        u.Email,
 		Password:     u.Password,
 		Gender:       u.Gender,
+		Mobile:       u.Mobile,
 		Role:         u.Role,
 		PhotoProfile: u.PhotoProfile,
 		CreatedAt:    u.CreatedAt,

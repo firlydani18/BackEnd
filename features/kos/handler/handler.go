@@ -49,7 +49,7 @@ func (handler *KosHandler) CreateKos(c echo.Context) error {
 		ID: strconv.Itoa(int(kosId)),
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success create kos", response))
+	return c.JSON(http.StatusOK, responses.WebResponse("success create Apartement", response))
 }
 
 func (handler *KosHandler) UploadImages(c echo.Context) error {

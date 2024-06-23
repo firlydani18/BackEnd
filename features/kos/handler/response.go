@@ -46,6 +46,13 @@ type KosIdResponse struct {
 	ID string `json:"kos_id"`
 }
 
+// type LinkResponse struct {
+// 	Traveloka string `json:"traveloka"`
+// 	Hotelcom  string `json:"hotelcom"`
+// 	Agoda     string `json:"agoda"`
+// 	Tiketcom  string `json:"tikrtcom"`
+// }
+
 type KosResponseDetail struct {
 	ID            uint                          `json:"id"`
 	Name          string                        `json:"kos_name"`
@@ -57,6 +64,10 @@ type KosResponseDetail struct {
 	Address       string                        `json:"address"`
 	Longitude     string                        `json:"longitude"`
 	Latitude      string                        `json:"latitude"`
+	Traveloka     string                        `json:"traveloka"`
+	Hotelcom      string                        `json:"hotelcom"`
+	Agoda         string                        `json:"agoda"`
+	Tiketcom      string                        `json:"tiketcom"`
 	KosFacilities []KosFacilityResponse         `json:"kos_facilities"`
 	KosRules      []KosRuleResponse             `json:"kos_rules"`
 	PhotoKos      PhotoDetailResponse           `json:"photo_kos"`
@@ -143,6 +154,10 @@ func CoreToGetDetail(kos kos.Core) KosResponseDetail {
 		Latitude:      kos.Latitude,
 		KosFacilities: kosFacilities,
 		KosRules:      kosRules,
+		Traveloka:     kos.Traveloka,
+		Agoda:         kos.Agoda,
+		Hotelcom:      kos.Hotelcom,
+		Tiketcom:      kos.Tiketcom,
 		PhotoKos: PhotoDetailResponse{
 			PhotoMain:       kos.PhotoMain,
 			PhotoFront:      kos.PhotoFront,

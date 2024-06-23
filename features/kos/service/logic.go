@@ -52,6 +52,18 @@ func (ks *kosService) Create(userIdLogin int, input kos.CoreInput) (uint, error)
 	if input.Address == "" {
 		return 0, errors.New("alamat anda kosong")
 	}
+	if input.Traveloka == "" {
+		return 0, errors.New("traveloka anda kosong")
+	}
+	if input.Agoda == "" {
+		return 0, errors.New("agoda anda kosong")
+	}
+	if input.Hotelcom == "" {
+		return 0, errors.New("hotel.com anda kosong")
+	}
+	if input.Tiketcom == "" {
+		return 0, errors.New("tiket.com anda kosong")
+	}
 
 	errValidate := ks.validate.Struct(input)
 	if errValidate != nil {
@@ -124,7 +136,7 @@ func (ks *kosService) Delete(userIdLogin int, kosId int) error {
 
 		return err
 	}
-	
+
 	if kos.User.ID != uint(userIdLogin) {
 		return errors.New("kos ini bukan milik Anda")
 	}

@@ -8,6 +8,7 @@ type UserRequest struct {
 	Email        string `json:"email" form:"email"`
 	Password     string `json:"password" form:"password"`
 	Gender       string `json:"gender" form:"gender"`
+	Mobile       string `json:"mobile" form:"mobile"`
 	Role         string `json:"role" form:"role"`
 	PhotoProfile string `json:"photo_profile" form:"photo_profile"`
 }
@@ -29,6 +30,7 @@ func RequestToCore(input UserRequest) user.Core {
 		Email:        input.Email,
 		Password:     input.Password,
 		Gender:       input.Gender,
+		Mobile:       input.Mobile,
 		Role:         input.Role,
 		PhotoProfile: input.PhotoProfile,
 	}
@@ -40,6 +42,7 @@ func UpdateRequestToCore(input UserRequest, imageURL string) user.Core {
 		UserName:     input.UserName,
 		Email:        input.Email,
 		Gender:       input.Gender,
+		Mobile:       input.Mobile,
 		PhotoProfile: imageURL,
 	}
 }
@@ -49,6 +52,7 @@ func UpdateRequestToCoreUpdate(input UserRequest, imageURL string) user.CoreUpda
 		Name:         input.Name,
 		UserName:     input.UserName,
 		Email:        input.Email,
+		Mobile:       input.Mobile,
 		PhotoProfile: imageURL,
 	}
 }
